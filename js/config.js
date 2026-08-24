@@ -17,9 +17,9 @@ const CONFIG = {
     {
       id: "gas-by-car",
       label: "Gas spend by car",
-      spreadsheetUrl: "PUT_GOOGLE_SHEET_URL_HERE",
-      sheetName: "Gas Spend",
-      keyColumnHeader: "Car License",
+      spreadsheetUrl: "https://docs.google.com/spreadsheets/d/1Mg7SfatGUep1u1WU0yiSNYlwklg9gAhG/edit",
+      sheetName: "צריכת דלק ",
+      keyColumnHeader: "מס' רכב",
     },
   ],
 };
