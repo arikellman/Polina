@@ -94,6 +94,16 @@ table td, table th {
 
 .header-row td { background: #eef1f8; font-weight: 600; }
 
+td.row-actions { text-align: center; background: #fafbfd; }
+.row-delete {
+  margin: 0;
+  padding: 2px 7px;
+  font-size: 0.75rem;
+  background: #eee;
+  color: var(--error);
+}
+.row-delete:hover { background: #f3d9d5; }
+
 #previewTable { display: block; overflow-x: auto; white-space: nowrap; max-height: 320px; overflow-y: auto; }
 
 .status {

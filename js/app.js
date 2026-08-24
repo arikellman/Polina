@@ -55,6 +55,21 @@ function renderGrid() {
   currentGrid.forEach((row, rIdx) => {
     const tr = document.createElement("tr");
     if (rIdx === 0 && hasHeaderRow) tr.classList.add("header-row");
+
+    const tdActions = document.createElement("td");
+    tdActions.className = "row-actions";
+    const delBtn = document.createElement("button");
+    delBtn.type = "button";
+    delBtn.className = "row-delete";
+    delBtn.textContent = "✕";
+    delBtn.title = "Delete this row";
+    delBtn.addEventListener("click", () => {
+      currentGrid.splice(rIdx, 1);
+      renderGrid();
+    });
+    tdActions.appendChild(delBtn);
+    tr.appendChild(tdActions);
+
     row.forEach((cell, cIdx) => {
       const td = document.createElement("td");
       td.contentEditable = "true";
@@ -132,6 +147,8 @@ function init() {
   els.hasHeaderCheckbox = $("hasHeaderCheckbox");
   els.previewSection = $("previewSection");
   els.previewTable = $("previewTable");
+  els.bulkDeleteCount = $("bulkDeleteCount");
+  els.bulkDeleteBtn = $("bulkDeleteBtn");
   els.groupColSelect = $("groupColSelect");
   els.sumColSelect = $("sumColSelect");
   els.computeBtn = $("computeBtn");
@@ -170,6 +187,13 @@ function init() {
     } catch (e) {
       renderStatus(e.message, true);
     }
+  });
+
+  els.bulkDeleteBtn.addEventListener("click", () => {
+    const n = parseInt(els.bulkDeleteCount.value, 10);
+    if (!Number.isFinite(n) || n <= 0) return;
+    currentGrid.splice(0, Math.min(n, currentGrid.length));
+    renderGrid();
   });
 
   els.hasHeaderCheckbox.addEventListener("change", () => {

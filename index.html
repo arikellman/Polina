@@ -46,7 +46,16 @@
 
     <section class="card" id="previewSection" style="display:none;">
       <h2>4. Review &amp; fix the extracted table</h2>
-      <p class="hint">PDF extraction is best-effort — double check the numbers and department/car names below before continuing. Cells are editable.</p>
+      <p class="hint">PDF extraction is best-effort — double check the numbers and department/car names below before continuing. Cells are editable, and rows can be deleted (useful for title/summary rows above the real header, common in invoice exports).</p>
+      <div class="row">
+        <div>
+          <label for="bulkDeleteCount">Delete first N rows</label>
+          <input type="text" id="bulkDeleteCount" placeholder="e.g. 14" />
+        </div>
+        <div style="align-self:flex-end;">
+          <button id="bulkDeleteBtn" class="secondary">Delete</button>
+        </div>
+      </div>
       <table id="previewTable"></table>
 
       <div class="row">
