@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Polina's Expense Updater</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Expense Updater</h1>
+    <p>Upload an invoice (PDF/XLSX) or link a Google Sheet, review the extracted numbers, and push totals into your tracking sheet.</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>1. Connect to Google</h2>
+      <button id="signInBtn">Connect Google account</button>
+      <div id="authState" class="hint">Not connected yet.</div>
+    </section>
+
+    <section class="card">
+      <h2>2. Choose what you're updating</h2>
+      <label for="connectionSelect">Use case</label>
+      <select id="connectionSelect"></select>
+
+      <div id="customFields" style="display:none;">
+        <label for="customSheetUrl">Google Sheet URL</label>
+        <input type="url" id="customSheetUrl" placeholder="https://docs.google.com/spreadsheets/d/..." />
+        <label for="customSheetName">Tab name</label>
+        <input type="text" id="customSheetName" placeholder="e.g. Sheet1" />
+        <label for="customKeyHeader">Row label (what each row represents)</label>
+        <input type="text" id="customKeyHeader" placeholder="e.g. Department, Car License" />
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>3. Provide the source data</h2>
+      <label for="fileInput">Upload PDF or XLSX</label>
+      <input type="file" id="fileInput" accept=".pdf,.xlsx,.xls" />
+      <label for="sourceSheetUrl">…or paste a Google Sheet link instead</label>
+      <input type="url" id="sourceSheetUrl" placeholder="https://docs.google.com/spreadsheets/d/..." />
+      <label><input type="checkbox" id="hasHeaderCheckbox" checked /> First row is a header</label>
+      <button id="extractBtn">Extract table</button>
+    </section>
+
+    <section class="card" id="previewSection" style="display:none;">
+      <h2>4. Review &amp; fix the extracted table</h2>
+      <p class="hint">PDF extraction is best-effort — double check the numbers and department/car names below before continuing. Cells are editable.</p>
+      <table id="previewTable"></table>
+
+      <div class="row">
+        <div>
+          <label for="groupColSelect">Group by (e.g. Department / Car License)</label>
+          <select id="groupColSelect"></select>
+        </div>
+        <div>
+          <label for="sumColSelect">Sum this column (e.g. Amount)</label>
+          <select id="sumColSelect"></select>
+        </div>
+      </div>
+      <button id="computeBtn">Compute totals</button>
+    </section>
+
+    <section class="card" id="totalsSection" style="display:none;">
+      <h2>5. Confirm totals &amp; update sheet</h2>
+      <table>
+        <thead><tr><th>Key</th><th>Total</th></tr></thead>
+        <tbody id="totalsTable"></tbody>
+      </table>
+      <label for="monthLabel">Month column label</label>
+      <input type="text" id="monthLabel" placeholder="e.g. 2026-08" />
+      <button id="updateSheetBtn">Update Google Sheet</button>
+    </section>
+
+    <div id="status" class="status"></div>
+  </main>
+
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.js";
+  </script>
+  <script src="js/config.js"></script>
+  <script src="js/sheetsApi.js"></script>
+  <script src="js/tableExtract.js"></script>
+  <script src="js/aggregate.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
