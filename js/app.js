@@ -164,16 +164,26 @@ function init() {
   populateConnections();
   els.connectionSelect.addEventListener("change", updateCustomVisibility);
 
-  SheetsApi.init((err) => {
-    if (err) {
-      renderStatus(`Google sign-in failed: ${err.message}`, true);
-      return;
-    }
-    els.authState.textContent = "Connected to Google.";
-    els.signInBtn.textContent = "Reconnect";
-  });
+  try {
+    SheetsApi.init((err) => {
+      if (err) {
+        renderStatus(`Google sign-in failed: ${err.message}`, true);
+        return;
+      }
+      els.authState.textContent = "Connected to Google.";
+      els.signInBtn.textContent = "Reconnect";
+    });
+  } catch (e) {
+    renderStatus(`Google sign-in isn't available right now (${e.message}). Try reloading the page.`, true);
+  }
 
-  els.signInBtn.addEventListener("click", () => SheetsApi.signIn());
+  els.signInBtn.addEventListener("click", () => {
+    try {
+      SheetsApi.signIn();
+    } catch (e) {
+      renderStatus(`Google sign-in isn't available right now (${e.message}). Try reloading the page.`, true);
+    }
+  });
 
   els.extractBtn.addEventListener("click", async () => {
     try {
