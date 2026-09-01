@@ -1,7 +1,7 @@
 // Fill these in after creating your Google Cloud OAuth client (see README.md).
 const CONFIG = {
   // OAuth 2.0 Client ID from Google Cloud Console (Web application type).
-  googleClientId: "YOUR_GOOGLE_OAUTH_CLIENT_ID.apps.googleusercontent.com",
+  googleClientId: "172923141127-ro1k8s11205229lbfh9jkafpna51fq9j.apps.googleusercontent.com",
 
   // Pre-defined destinations so Polina can pick a use case from a dropdown
   // instead of typing sheet details every time. Add more entries any time a
