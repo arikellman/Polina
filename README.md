@@ -83,6 +83,37 @@ then commit and push — GitHub Pages redeploys automatically.
    updates it if it already exists) and adds any new rows for groups not
    seen before, without touching other data in the sheet.
 
+### Handling invoices with per-transaction detail (e.g. the gas invoice)
+
+Some invoices (the fuel-card statement, for example) list every individual
+transaction with a subtotal line per group, rather than one row per group.
+For those:
+
+1. Extract as usual, then use **"Keep only rows containing text"** with a
+   snippet that's unique to the subtotal lines (e.g. the Hebrew word that
+   appears in "Total for car #:") to drop all the individual transaction
+   rows and keep just the per-car subtotals.
+2. The remaining cells may still combine a couple of values (e.g. a car
+   number bundled with its label, or two amounts in one cell, since PDF
+   text position clustering isn't perfect) — edit those cells directly to
+   pull out just the number you need.
+3. Then map columns and compute totals as usual.
+
+This was verified against a real monthly fuel-card statement: filtering
+down to the 8 per-car subtotal rows and cleaning up the two combined cells
+reproduced the invoice's totals exactly, including the grand total.
+
+## Notes on the two current use cases
+
+- **Gett taxi spend by department**: Gett's monthly tax invoice PDF only
+  has the total amount, not a department breakdown. The department detail
+  has to be exported from Gett's business portal ("Reports" tab → export
+  trips to Excel for the relevant month) — that XLSX export is the correct
+  source file, not the PDF invoice.
+- **Gas spend by car**: the monthly fuel-card statement lists every
+  individual fill-up with a subtotal per car — see "Handling invoices with
+  per-transaction detail" above for the extra filtering step this needs.
+
 ## Notes / limitations
 
 - PDF parsing is heuristic — it reconstructs the table from text positions,

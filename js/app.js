@@ -149,6 +149,8 @@ function init() {
   els.previewTable = $("previewTable");
   els.bulkDeleteCount = $("bulkDeleteCount");
   els.bulkDeleteBtn = $("bulkDeleteBtn");
+  els.filterText = $("filterText");
+  els.filterBtn = $("filterBtn");
   els.groupColSelect = $("groupColSelect");
   els.sumColSelect = $("sumColSelect");
   els.computeBtn = $("computeBtn");
@@ -193,6 +195,13 @@ function init() {
     const n = parseInt(els.bulkDeleteCount.value, 10);
     if (!Number.isFinite(n) || n <= 0) return;
     currentGrid.splice(0, Math.min(n, currentGrid.length));
+    renderGrid();
+  });
+
+  els.filterBtn.addEventListener("click", () => {
+    const needle = els.filterText.value.trim();
+    if (!needle) return;
+    currentGrid = currentGrid.filter((row) => row.some((cell) => cell.includes(needle)));
     renderGrid();
   });
 

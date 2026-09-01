@@ -56,6 +56,16 @@
           <button id="bulkDeleteBtn" class="secondary">Delete</button>
         </div>
       </div>
+      <div class="row">
+        <div>
+          <label for="filterText">Keep only rows containing text</label>
+          <input type="text" id="filterText" placeholder="e.g. Total, Subtotal, a car number label…" />
+          <p class="hint">Useful when a source has one detail row per transaction plus a subtotal row per group (e.g. a fuel card statement) — filter down to just the subtotal rows, then map columns.</p>
+        </div>
+        <div style="align-self:flex-end;">
+          <button id="filterBtn" class="secondary">Keep matching</button>
+        </div>
+      </div>
       <table id="previewTable"></table>
 
       <div class="row">
