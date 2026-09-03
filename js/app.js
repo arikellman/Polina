@@ -42,6 +42,12 @@ function getSelectedConnection() {
 
 function updateCustomVisibility() {
   els.customFields.style.display = els.connectionSelect.value === "custom" ? "block" : "none";
+  const conn = getSelectedConnection();
+  if (conn && conn.monthLabelHint) {
+    els.monthLabelHint.textContent = conn.monthLabelHint;
+  } else {
+    els.monthLabelHint.textContent = "Match whatever format the target sheet already uses for its month headers.";
+  }
 }
 
 function renderStatus(msg, isError) {
@@ -157,6 +163,7 @@ function init() {
   els.totalsSection = $("totalsSection");
   els.totalsTable = $("totalsTable");
   els.monthLabel = $("monthLabel");
+  els.monthLabelHint = $("monthLabelHint");
   els.updateSheetBtn = $("updateSheetBtn");
   els.status = $("status");
 
@@ -237,15 +244,29 @@ function init() {
       if (!conn.spreadsheetUrl) throw new Error("No target Google Sheet configured for this use case.");
       const spreadsheetId = SheetsApi.extractSpreadsheetId(conn.spreadsheetUrl);
       const totals = computeTotals();
+      const monthLabel = els.monthLabel.value.trim();
       renderStatus("Writing to sheet…", false);
-      const result = await SheetsApi.updateRunningTable({
-        spreadsheetId,
-        sheetName: conn.sheetName,
-        keyColumnHeader: conn.keyColumnHeader,
-        monthLabel: els.monthLabel.value.trim(),
-        totals,
-      });
-      renderStatus(`Done. Sheet "${conn.sheetName}" updated (${result.rowsWritten} rows, ${result.columnsWritten} columns).`, false);
+
+      if (conn.layout === "grouped-month-total") {
+        const result = await SheetsApi.updateGroupedMonthlyTotal({
+          spreadsheetId,
+          sheetNameTemplate: conn.sheetNameTemplate,
+          keyColumnHeader: conn.keyColumnHeader,
+          totalSubHeaderLabel: conn.totalSubHeaderLabel,
+          monthLabel,
+          totals,
+        });
+        renderStatus(`Done. Tab "${result.sheetName}" updated (${result.cellsWritten} cells).`, false);
+      } else {
+        const result = await SheetsApi.updateRunningTable({
+          spreadsheetId,
+          sheetName: conn.sheetName,
+          keyColumnHeader: conn.keyColumnHeader,
+          monthLabel,
+          totals,
+        });
+        renderStatus(`Done. Sheet "${conn.sheetName}" updated (${result.rowsWritten} rows, ${result.columnsWritten} columns).`, false);
+      }
     } catch (e) {
       renderStatus(e.message, true);
     }
